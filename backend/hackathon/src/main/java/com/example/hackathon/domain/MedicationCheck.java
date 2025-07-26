@@ -24,6 +24,5 @@ public class MedicationCheck {
     private UserMedication userMedication;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private MedicationCheckStatus status;
 }

@@ -17,16 +17,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = true, unique = true)
     private String email;
-
-    @Column(nullable = true, unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
-    private String name;
+    private String name; // 아마 없을 듯
 
-    @Column(nullable = false, unique = true)
     private String googleId;
 }

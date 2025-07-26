@@ -21,7 +21,6 @@ public class UserMedication {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
     private String medicationName;
 
     // 알림 시간을 저장
