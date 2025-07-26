@@ -20,7 +20,30 @@ const QuizView = ({ onBackToMain }) => {
         }
     };
 
-    const handleCheck = () => {
+    const addPointsToAccount = async (points) => {
+        try {
+            const response = await fetch('/points/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ points: points })
+            });
+            
+            if (!response.ok) {
+                throw new Error('포인트 적립에 실패했습니다.');
+            }
+            
+            const result = await response.json();
+            console.log('포인트 적립 성공:', result);
+            return result;
+        } catch (error) {
+            console.error('포인트 적립 오류:', error);
+            throw error;
+        }
+    };
+
+    const handleCheck = async () => {
         const correct = selectedAnswer === currentQuestion.correctAnswer;
         setIsCorrect(correct);
         setShowResult(true);
@@ -28,8 +51,15 @@ const QuizView = ({ onBackToMain }) => {
         if (correct) {
             setEarnedPoints(currentQuestion.points);
             setShowSuccessModal(true);
-            // Here you would typically save points to user's account
-            console.log(`정답! ${currentQuestion.points}포인트 적립되었습니다.`);
+            
+            // API call to add points to user's account
+            try {
+                await addPointsToAccount(currentQuestion.points);
+                console.log(`정답! ${currentQuestion.points}포인트 적립되었습니다.`);
+            } catch (error) {
+                console.error('포인트 적립 실패:', error);
+                // You might want to show an error message to the user here
+            }
         } else {
             setEarnedPoints(0);
             setShowFailModal(true);

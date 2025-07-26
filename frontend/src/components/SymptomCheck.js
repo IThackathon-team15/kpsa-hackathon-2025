@@ -62,9 +62,10 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose, isInline = false 
             date: selectedDate,
             symptoms: selectedSymptoms.map(id => {
                 const commonSymptom = commonSymptoms.find(s => s.id === id);
+                const isCustom = id.startsWith('custom_');
                 return {
                     id,
-                    name: commonSymptom ? commonSymptom.name : customSymptom,
+                    name: commonSymptom ? commonSymptom.name : (isCustom ? `사용자 증상 ${id.split('_')[1]}` : id),
                     severity: severity[id] || 1
                 };
             }),

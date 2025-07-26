@@ -11,6 +11,7 @@ import { patientAPI } from './services/api';
 import './App.css';
 
 function App() {
+  const [storeType, setStoreType] = useState('stomach');
   const [currentPage, setCurrentPage] = useState('welcome');
   const [currentUser, setCurrentUser] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -71,7 +72,7 @@ function App() {
       
     } catch (error) {
       console.error('Failed to save patient data:', error);
-      alert('정보 저장에 실패했습니다. 다시 시도해주세요.');
+      //alert('정보 저장에 실패했습니다. 다시 시도해주세요.');
       
       // 개발용: 에러 발생 시에도 메인 페이지로 이동
       setCurrentUser({
@@ -83,7 +84,8 @@ function App() {
   };
 
   // 쇼핑 페이지로 이동
-  const handleGoToShop = () => {
+  const handleGoToShop = (type) => {
+    setStoreType(type || 'stomach'); // 기본값 fallback
     setCurrentPage('shop');
   };
 
@@ -140,6 +142,7 @@ function App() {
         <ShopPage 
           user={currentUser}
           onBackToMain={handleBackToMain}
+          storeType={storeType}
         />
       )}
       {currentPage === 'membership' && (

@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCancerTypeInfo } from '../services/cbioportalApi';
+import './PatientInfoPage2.css';
 
 const PatientInfoPage2 = ({ onNext }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [passAuthenticated, setPassAuthenticated] = useState(false);
+  const [cancerTypeData, setCancerTypeData] = useState(null);
+  const [isLoadingCancerData, setIsLoadingCancerData] = useState(false);
 
   const questions = [
     {
@@ -18,22 +22,40 @@ const PatientInfoPage2 = ({ onNext }) => {
       id: 'cancer_type',
       title: '어떤 암 진단 받으셨나요?',
       options: [
-        { value: 'thyroid', label: '갑상선암', icon: '🦋' },
-        { value: 'colon', label: '대장암', icon: '🩺' },
-        { value: 'lung', label: '폐암', icon: '🫁' },
-        { value: 'breast', label: '유방암', icon: '🎀' },
-        { value: 'stomach', label: '위암', icon: '🫃' },
-        { value: 'prostate', label: '전립선암', icon: '♂️' },
-        { value: 'liver', label: '간암', icon: '🫀' },
+        { value: 'thyroid', label: '갑상선암', icon: '🦋', cancerTypeId: 'thme' },
+        { value: 'colon', label: '대장암', icon: '🩺', cancerTypeId: 'coad' },
+        { value: 'lung', label: '폐암', icon: '🫁', cancerTypeId: 'luad' },
+        { value: 'breast', label: '유방암', icon: '🎀', cancerTypeId: 'mbc' },
+        { value: 'stomach', label: '위암', icon: '🫃', cancerTypeId: 'stad' },
+        { value: 'prostate', label: '전립선암', icon: '♂️', cancerTypeId: 'bccp' },
+        { value: 'liver', label: '간암', icon: '🫀', cancerTypeId: 'hcc' },
         { value: 'other', label: '기타', icon: '📋' }
       ],
       showIf: (answers) => answers.cancer_diagnosis === 'yes'
     }
   ];
 
-  const handleAnswer = (questionId, value) => {
+  const handleAnswer = async (questionId, value) => {
     const newAnswers = { ...answers, [questionId]: value };
     setAnswers(newAnswers);
+    
+    // 암 종류를 선택했을 때 API 호출
+    if (questionId === 'cancer_type' && value !== 'other') {
+      const selectedOption = questions[1].options.find(option => option.value === value);
+      if (selectedOption && selectedOption.cancerTypeId) {
+        setIsLoadingCancerData(true);
+        try {
+          const cancerData = await getCancerTypeInfo(selectedOption.cancerTypeId);
+          setCancerTypeData(cancerData);
+          console.log('Cancer type data:', cancerData);
+        } catch (error) {
+          console.error('Failed to fetch cancer type data:', error);
+          setCancerTypeData(null);
+        } finally {
+          setIsLoadingCancerData(false);
+        }
+      }
+    }
     
     // 다음 질문으로 이동하거나 PASS 인증으로 이동
     const nextQuestionIndex = currentQuestion + 1;
@@ -68,6 +90,7 @@ const PatientInfoPage2 = ({ onNext }) => {
     const data = {
       cancerDiagnosis: answers.cancer_diagnosis,
       cancerType: answers.cancer_type,
+      cancerTypeData: cancerTypeData,
       passAuthenticated
     };
     console.log('Page 2 data:', data);
@@ -115,12 +138,34 @@ const PatientInfoPage2 = ({ onNext }) => {
                 key={option.value}
                 className={`option-btn ${answers[currentQ.id] === option.value ? 'selected' : ''}`}
                 onClick={() => handleAnswer(currentQ.id, option.value)}
+                disabled={isLoadingCancerData}
               >
                 <div className="option-icon">{option.icon}</div>
                 <span>{option.label}</span>
               </button>
             ))}
           </div>
+          
+          {/* 암 종류 데이터 로딩 상태 */}
+          {isLoadingCancerData && (
+            <div className="loading-indicator">
+              <p>암 종류 정보를 불러오는 중...</p>
+            </div>
+          )}
+          
+          {/* 암 종류 데이터 표시 */}
+          {cancerTypeData && answers.cancer_type && (
+            <div className="cancer-info-card">
+              <h4>선택한 암 종류 정보</h4>
+              <div className="cancer-details">
+                <p><strong>이름:</strong> {cancerTypeData.name}</p>
+                <p><strong>약어:</strong> {cancerTypeData.shortName}</p>
+                <p><strong>분류:</strong> {cancerTypeData.parent}</p>
+                <div className="cancer-color" style={{backgroundColor: cancerTypeData.dedicatedColor, width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block'}}></div>
+                <span style={{marginLeft: '8px'}}>대표 색상</span>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

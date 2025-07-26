@@ -6,6 +6,7 @@ import sideeffectIcon from '../assets/sideeffect.png'
 import imageIcon from '../assets/image.png'
 import SymptomCheck from './SymptomCheck';
 import CancerEncyclopedia from './CancerEncyclopedia';
+import PharmacyMap from './PharmacyMaps';
 
 const DrugScheduleCard = () => {
     return (
@@ -19,7 +20,6 @@ const DrugScheduleCard = () => {
             display: 'flex',
             flexDirection: 'column',
             gap: '4px',
-            marginTop: '20px'
         }}>
             {/* 날짜 */}
             <div style={{ fontSize: '14px', color: '#6b7280' }}>2025.07.02</div>
@@ -34,6 +34,7 @@ const DrugScheduleCard = () => {
 };
 
 const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) => {
+    const [storeType, setStoreType] = useState('stomach'); 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(2); // September 2nd selected
     const [showSymptomCheck, setShowSymptomCheck] = useState(false);
@@ -87,6 +88,41 @@ const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) 
             [data.date]: data
         }));
 
+        // 증상 기반 storeType 판별
+        const symptomNames = data.symptoms.map(s => s.name);
+
+        // 단순 매핑 예시
+        const symptomToStoreTypeMap = {
+            '위통': 'stomach',
+            '소화불량': 'stomach',
+            '식욕부진': 'stomach',
+            '피로': 'chemo',
+            '구토': 'chemo',
+            '메스꺼움': 'chemo',
+            '복통': 'colon',
+            '장루 관리': 'colon',
+            '설사': 'colon',
+            '팔 림프 부종': 'breast',
+            '가슴형태 보존': 'breast',
+            '배뇨곤란': 'prostate',
+            '체력저하': 'prostate',
+            '탈모': 'all',
+            '손발톱 문제': 'all',
+            '구강 건조': 'all',
+        };
+
+        const matchedTypes = symptomNames.map(symptom => symptomToStoreTypeMap[symptom]).filter(Boolean);
+
+        if (matchedTypes.length > 0) {
+            // 최빈값으로 대표 storeType 결정
+            const counts = matchedTypes.reduce((acc, cur) => {
+                acc[cur] = (acc[cur] || 0) + 1;
+                return acc;
+            }, {});
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            const mostCommonType = sorted[0][0];
+            setStoreType(mostCommonType);
+        }
         // 증상이 기록된 날짜에 표시 업데이트
         console.log('증상 데이터 저장됨:', data);
     };
@@ -294,7 +330,7 @@ const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) 
                         minWidth: '100%',
                         display: 'flex',
                         justifyContent: 'center',
-                        padding: '0 20px'
+                        padding: '20px 20px'
                     }}>
                         <DrugScheduleCard />
                     </div>
@@ -471,7 +507,7 @@ const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) 
                 </button>
 
                 <button
-                    onClick={onGoToShop}
+                    onClick={() => onGoToShop(storeType)}
                     style={{
                         flex: 1,
                         padding: '14px 16px',
@@ -488,6 +524,14 @@ const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) 
                 >
                     스토어
                 </button>
+            </div>
+            <div style={{
+                width: '100%',
+                height: '200px',     // 고정 높이
+                maxHeight: '200px',  // 최대 높이
+                border: '1px solid #ddd'
+            }}>
+                <PharmacyMap />
             </div>
 
             {/* Logout Button */}

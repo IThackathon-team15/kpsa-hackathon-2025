@@ -1,0 +1,66 @@
+/* Loading indicator styles */
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.loading-indicator p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Cancer info card styles */
+.cancer-info-card {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cancer-info-card h4 {
+  margin: 0 0 15px 0;
+  color: #495057;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cancer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cancer-details p {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.cancer-details strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.cancer-color {
+  margin-right: 8px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Disabled button styles */
+.option-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.option-btn:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

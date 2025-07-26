@@ -56,7 +56,7 @@ const WelcomePage = ({ onLogin, onExistingUser }) => {
     } catch (error) {
       console.error('Phone login error:', error);
       // 에러 발생 시 개발용으로 환자 정보 페이지로 이동
-      alert('서버 연결에 문제가 있습니다. 다시 시도해주세요.');
+      //alert('서버 연결에 문제가 있습니다. 다시 시도해주세요.');
       // 개발용 임시 처리
       onLogin(phoneNumber.replace(/[^\d]/g, ''));
     } finally {

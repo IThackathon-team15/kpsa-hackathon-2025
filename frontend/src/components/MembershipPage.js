@@ -1,6 +1,7 @@
 import React from 'react';
 import imageIcon from '../assets/image.png';
 import './MembershipPage.css';
+import subscriptionimage from '../assets/subscription-square.png';
 
 const MembershipPage = ({ user, onBackToMain }) => {
   return (
@@ -78,30 +79,11 @@ const MembershipPage = ({ user, onBackToMain }) => {
             </div>
             <div className="plan-info" style={{ marginBottom: '16px' }}>
               <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#111827' }}>4인 12개월</h2>
-              <p style={{ fontSize: '14px', color: '#6B7280', margin: '0 0 12px 0' }}>*2026년 1월 4일 오후 3시 25분까지</p>
+              <p style={{ fontSize: '14px', color: '#6B7280', margin: '0 0 8px 0' }}>*2026년 1월 4일 오후 3시 25분까지</p>
               <div className="pricing">
-                <span className="price" style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>40,500원</span>
-                <span className="monthly" style={{ fontSize: '14px', color: '#10B981', marginLeft: '12px' }}>월 할인: 33,750원</span>
+                <span className="price" style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>₩40,500</span>
+                <span className="monthly" style={{ fontSize: '10px', color: '#10B981', marginLeft: '12px' }}>월 구독 할인: 33,750원</span>
               </div>
-            </div>
-            <div className="manage-section" style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px',
-              backgroundColor: '#F9FAFB',
-              borderRadius: '8px'
-            }}>
-              <div className="manage-text" style={{ fontSize: '14px', color: '#374151' }}>
-                프리미엄 멤버십 구성원 관리하기
-              </div>
-              <button className="arrow-btn" style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '18px',
-                color: '#6B7280',
-                cursor: 'pointer'
-              }}>›</button>
             </div>
           </div>
         </div>
@@ -132,40 +114,25 @@ const MembershipPage = ({ user, onBackToMain }) => {
               <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#111827' }}>1인 6개월</h2>
               <p style={{ fontSize: '14px', color: '#6B7280', margin: '0 0 12px 0' }}>*2025년 12월 31일까지</p>
               <div className="pricing">
-                <span className="price" style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>19,900원</span>
-                <span className="monthly" style={{ fontSize: '14px', color: '#10B981', marginLeft: '12px' }}>월 할인: 16,500원</span>
+                <span className="price" style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>₩19,900</span>
+                <span className="monthly" style={{ fontSize: '10px', color: '#10B981', marginLeft: '12px' }}>월 구독 할인: 16,500원</span>
               </div>
-            </div>
-            <div className="manage-section" style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px',
-              backgroundColor: '#F9FAFB',
-              borderRadius: '8px'
-            }}>
-              <div className="manage-text" style={{ fontSize: '14px', color: '#374151' }}>
-                베이직 멤버십 구성원 관리하기
-              </div>
-              <button className="arrow-btn" style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '18px',
-                color: '#6B7280',
-                cursor: 'pointer'
-              }}>›</button>
             </div>
           </div>
         </div>
 
         {/* 구독시 혜택 섹션 */}
         <div className="benefits-section" style={{
-          backgroundColor: '#FEF3C7',
+          backgroundImage: `url(${subscriptionimage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           borderRadius: '12px',
           marginBottom: '20px',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
           border: '1px solid #FDE68A',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          position: 'relative'
         }}>
           <div className="card-content" style={{
             padding: '20px',
@@ -174,9 +141,9 @@ const MembershipPage = ({ user, onBackToMain }) => {
             alignItems: 'center'
           }}>
             <div className="benefits-content">
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#92400E' }}>구독시 혜택</h3>
-              <p style={{ fontSize: '14px', color: '#92400E', margin: '0' }}>전문 의료진 상담</p>
-              <p style={{ fontSize: '14px', color: '#92400E', margin: '0' }}>맞춤형 건강 관리</p>
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#92400E' }}>구독 혜택</h3>
+              <p style={{ fontSize: '14px', color: '#42400E', margin: '0' }}>전문 의료진 상담</p>
+              <p style={{ fontSize: '14px', color: '#42400E', margin: '0' }}>맞춤형 건강 관리</p>
             </div>
             <div className="benefits-image" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <div className="stethoscope-icon" style={{ fontSize: '32px' }}>🩺</div>
