@@ -3,7 +3,9 @@ import surgeryIcon from '../assets/surgery.png';
 import medicationIcon from '../assets/medication.png'
 import radiationIcon from '../assets/radiation.png'
 import sideeffectIcon from '../assets/sideeffect.png'
+import imageIcon from '../assets/image.png'
 import SymptomCheck from './SymptomCheck';
+import CancerEncyclopedia from './CancerEncyclopedia';
 
 const DrugScheduleCard = () => {
     return (
@@ -21,9 +23,9 @@ const DrugScheduleCard = () => {
             {/* 날짜 */}
             <div style={{ fontSize: '14px', color: '#6b7280' }}>2025.07.02</div>
             {/* D-day */}
-            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827' }}>D-4</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827' }}>D+59</div>
             {/* 사이클 */}
-            <div style={{ fontSize: '14px', color: '#9ca3af' }}>x번째 cycle</div>
+            <div style={{ fontSize: '14px', color: '#9ca3af' }}>Xeloda #8 cycle 완료</div>
             {/* 메뉴 아이콘 */}
             <div style={{ marginLeft: 'auto', color: '#9ca3af', fontSize: '20px', lineHeight: '1' }}>⋯</div>
         </div>
@@ -35,6 +37,7 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
     const [selectedDate, setSelectedDate] = useState(2); // September 2nd selected
     const [showSymptomCheck, setShowSymptomCheck] = useState(false);
     const [symptomData, setSymptomData] = useState({});
+    const [showEncyclopedia, setShowEncyclopedia] = useState(false);
 
     // Sample calendar data - 증상 기록이 있는 날짜 표시
     const calendarEvents = {
@@ -81,7 +84,7 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
             ...prev,
             [data.date]: data
         }));
-        
+
         // 증상이 기록된 날짜에 표시 업데이트
         console.log('증상 데이터 저장됨:', data);
     };
@@ -163,16 +166,36 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                 </div>
             </div>
 
-            {/* Search Bar */}
-            <div className="search-container">
-                <div className="search-bar">
-                    <span className="search-icon">🔍</span>
-                    <input type="text" placeholder="2025.08.05 예약입니다." />
-                </div>
-            </div>
-
             {/* Calendar */}
             {renderCalendar()}
+
+            {/* Symptom Check Section */}
+            <div style={{
+                overflow: 'hidden',
+                transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
+                maxHeight: showSymptomCheck ? '800px' : '0',
+                opacity: showSymptomCheck ? 1 : 0
+            }}>
+                {showSymptomCheck && (
+                    <div style={{
+                        margin: '20px 0',
+                        padding: '20px',
+                        backgroundColor: 'white',
+                        borderRadius: '12px',
+                        border: '1px solid #E5E7EB',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                        transform: showSymptomCheck ? 'translateY(0)' : 'translateY(-20px)',
+                        transition: 'transform 0.3s ease-in-out'
+                    }}>
+                        <SymptomCheck
+                            selectedDate={selectedDate}
+                            onSaveSymptoms={handleSaveSymptoms}
+                            onClose={() => setShowSymptomCheck(false)}
+                            isInline={true}
+                        />
+                    </div>
+                )}
+            </div>
 
             {/* Selected Date Symptom Summary */}
             {symptomData[selectedDate] && (
@@ -183,9 +206,9 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                     borderRadius: '12px',
                     border: '1px solid #E0F2FE'
                 }}>
-                    <h3 style={{ 
-                        fontSize: '16px', 
-                        fontWeight: 'bold', 
+                    <h3 style={{
+                        fontSize: '16px',
+                        fontWeight: 'bold',
                         marginBottom: '8px',
                         color: '#0369A1'
                     }}>
@@ -197,10 +220,10 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                                 key={index}
                                 style={{
                                     padding: '4px 8px',
-                                    backgroundColor: symptom.severity === 3 ? '#FEE2E2' : 
-                                                   symptom.severity === 2 ? '#FEF3C7' : '#D1FAE5',
-                                    color: symptom.severity === 3 ? '#DC2626' : 
-                                           symptom.severity === 2 ? '#D97706' : '#059669',
+                                    backgroundColor: symptom.severity === 3 ? '#FEE2E2' :
+                                        symptom.severity === 2 ? '#FEF3C7' : '#D1FAE5',
+                                    color: symptom.severity === 3 ? '#DC2626' :
+                                        symptom.severity === 2 ? '#D97706' : '#059669',
                                     borderRadius: '12px',
                                     fontSize: '12px',
                                     fontWeight: '500'
@@ -211,9 +234,9 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                         ))}
                     </div>
                     {symptomData[selectedDate].notes && (
-                        <p style={{ 
-                            fontSize: '14px', 
-                            color: '#64748B', 
+                        <p style={{
+                            fontSize: '14px',
+                            color: '#64748B',
                             margin: 0,
                             fontStyle: 'italic'
                         }}>
@@ -232,25 +255,25 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
             <div className="services-section">
                 <h3 className="section-title">암 치료 백과사전</h3>
                 <div className="service-icons">
-                    <div className="service-icon">
+                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
                         <div className="icon-circle pink">
                             <img src={medicationIcon} alt="항암제 아이콘" style={{ width: '40px', height: '40px' }} />
                         </div>
                         <span>항암제</span>
                     </div>
-                    <div className="service-icon">
+                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
                         <div className="icon-circle orange">
                             <img src={radiationIcon} alt="방사선 아이콘" style={{ width: '40px', height: '40px' }} />
                         </div>
                         <span>방사선</span>
                     </div>
-                    <div className="service-icon">
+                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
                         <div className="icon-circle green">
                             <img src={surgeryIcon} alt="수술 아이콘" style={{ width: '40px', height: '40px' }} />
                         </div>
                         <span>수술</span>
                     </div>
-                    <div className="service-icon">
+                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
                         <div className="icon-circle blue">
                             <img src={sideeffectIcon} alt="부작용 아이콘" style={{ width: '40px', height: '40px' }} />
                         </div>
@@ -310,14 +333,22 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                 </button>
             </div>
 
-            {/* Symptom Check Modal */}
-            {showSymptomCheck && (
-                <SymptomCheck
-                    selectedDate={selectedDate}
-                    onSaveSymptoms={handleSaveSymptoms}
-                    onClose={() => setShowSymptomCheck(false)}
-                />
+            {/* Cancer Encyclopedia Modal */}
+            {showEncyclopedia && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'white',
+                    zIndex: 1000,
+                    overflow: 'auto'
+                }}>
+                    <CancerEncyclopedia onBack={() => setShowEncyclopedia(false)} />
+                </div>
             )}
+
         </div>
     );
 };

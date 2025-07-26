@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
+const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose, isInline = false }) => {
     const [selectedSymptoms, setSelectedSymptoms] = useState([]);
     const [customSymptom, setCustomSymptom] = useState('');
     const [severity, setSeverity] = useState({});
@@ -8,18 +8,18 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
 
     // 일반적인 암 환자 증상 목록
     const commonSymptoms = [
-        { id: 'fatigue', name: '피로감', icon: '😴' },
-        { id: 'nausea', name: '메스꺼움', icon: '🤢' },
-        { id: 'pain', name: '통증', icon: '😣' },
-        { id: 'appetite_loss', name: '식욕부진', icon: '🍽️' },
-        { id: 'vomiting', name: '구토', icon: '🤮' },
-        { id: 'diarrhea', name: '설사', icon: '💩' },
-        { id: 'constipation', name: '변비', icon: '🚽' },
-        { id: 'fever', name: '발열', icon: '🌡️' },
-        { id: 'headache', name: '두통', icon: '🤕' },
-        { id: 'dizziness', name: '어지러움', icon: '😵' },
-        { id: 'sleep_disorder', name: '수면장애', icon: '😪' },
-        { id: 'anxiety', name: '불안감', icon: '😰' }
+        { id: 'fatigue', name: '피로감' },
+        { id: 'nausea', name: '메스꺼움' },
+        { id: 'pain', name: '통증' },
+        { id: 'appetite_loss', name: '식욕부진' },
+        { id: 'vomiting', name: '구토' },
+        { id: 'diarrhea', name: '설사' },
+        { id: 'constipation', name: '변비' },
+        { id: 'fever', name: '발열' },
+        { id: 'headache', name: '두통' },
+        { id: 'dizziness', name: '어지러움' },
+        { id: 'sleep_disorder', name: '수면장애' },
+        { id: 'anxiety', name: '불안감' }
     ];
 
     const severityLevels = [
@@ -83,6 +83,226 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
         return date;
     };
 
+    const SymptomItem = ({ symptom }) => (
+        <div
+            key={symptom.id}
+            onClick={() => handleSymptomToggle(symptom.id)}
+            style={{
+                padding: '8px 12px',
+                border: selectedSymptoms.includes(symptom.id) 
+                    ? '1px solid #3B82F6' 
+                    : '1px solid #E5E7EB',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                backgroundColor: selectedSymptoms.includes(symptom.id) 
+                    ? '#F0F9FF' 
+                    : 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.15s ease',
+                fontSize: '13px',
+                fontWeight: selectedSymptoms.includes(symptom.id) ? '500' : '400',
+                color: selectedSymptoms.includes(symptom.id) ? '#1E40AF' : '#374151'
+            }}
+        >
+            {symptom.name}
+        </div>
+    );
+
+    if (isInline) {
+        return (
+            <div className="symptom-check-inline" style={{
+                width: '100%'
+            }}>
+                {/* Header */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '16px'
+                }}>
+                    <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+                        증상 기록
+                    </h2>
+                    <button 
+                        onClick={onClose}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '20px',
+                            cursor: 'pointer',
+                            color: '#6B7280'
+                        }}
+                    >
+                        ×
+                    </button>
+                </div>
+
+                {/* Date Display */}
+                <div style={{
+                    backgroundColor: '#F9FAFB',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    marginBottom: '16px',
+                    textAlign: 'center',
+                    border: '1px solid #F3F4F6'
+                }}>
+                    <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>
+                        {formatDate(selectedDate)}
+                    </span>
+                </div>
+
+                {/* Symptom Selection */}
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '8px', fontWeight: '500' }}>증상 선택</h3>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '6px'
+                    }}>
+                        {commonSymptoms.map(symptom => (
+                            <SymptomItem key={symptom.id} symptom={symptom} />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Custom Symptom Input */}
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '6px', fontWeight: '500' }}>기타 증상</h3>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                        <input
+                            type="text"
+                            value={customSymptom}
+                            onChange={(e) => setCustomSymptom(e.target.value)}
+                            placeholder="직접 입력하세요"
+                            style={{
+                                flex: 1,
+                                padding: '6px 10px',
+                                border: '1px solid #E5E7EB',
+                                borderRadius: '4px',
+                                fontSize: '13px'
+                            }}
+                        />
+                        <button
+                            onClick={handleAddCustomSymptom}
+                            style={{
+                                padding: '6px 12px',
+                                backgroundColor: '#3B82F6',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '13px'
+                            }}
+                        >
+                            추가
+                        </button>
+                    </div>
+                </div>
+
+                {/* Severity Selection */}
+                {selectedSymptoms.length > 0 && (
+                    <div style={{ marginBottom: '16px' }}>
+                        <h3 style={{ fontSize: '14px', marginBottom: '8px', fontWeight: '500' }}>심각도 선택</h3>
+                        {selectedSymptoms.map(symptomId => {
+                            const symptom = commonSymptoms.find(s => s.id === symptomId);
+                            const symptomName = symptom ? symptom.name : '기타 증상';
+                            
+                            return (
+                                <div key={symptomId} style={{ marginBottom: '8px' }}>
+                                    <div style={{ fontSize: '13px', marginBottom: '4px', color: '#374151' }}>
+                                        {symptomName}
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '6px' }}>
+                                        {severityLevels.map(level => (
+                                            <button
+                                                key={level.value}
+                                                onClick={() => handleSeverityChange(symptomId, level.value)}
+                                                style={{
+                                                    padding: '4px 10px',
+                                                    border: severity[symptomId] === level.value 
+                                                        ? `1px solid ${level.color}` 
+                                                        : '1px solid #E5E7EB',
+                                                    borderRadius: '4px',
+                                                    backgroundColor: severity[symptomId] === level.value 
+                                                        ? level.color 
+                                                        : 'white',
+                                                    color: severity[symptomId] === level.value 
+                                                        ? 'white' 
+                                                        : '#374151',
+                                                    cursor: 'pointer',
+                                                    fontSize: '11px'
+                                                }}
+                                            >
+                                                {level.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* Notes */}
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '6px', fontWeight: '500' }}>추가 메모</h3>
+                    <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="증상에 대한 추가 설명이나 메모를 입력하세요"
+                        style={{
+                            width: '100%',
+                            height: '60px',
+                            padding: '6px 10px',
+                            border: '1px solid #E5E7EB',
+                            borderRadius: '4px',
+                            fontSize: '13px',
+                            resize: 'vertical'
+                        }}
+                    />
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    justifyContent: 'flex-end'
+                }}>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            padding: '8px 16px',
+                            border: '1px solid #E5E7EB',
+                            borderRadius: '4px',
+                            backgroundColor: 'white',
+                            cursor: 'pointer',
+                            fontSize: '13px'
+                        }}
+                    >
+                        취소
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={selectedSymptoms.length === 0}
+                        style={{
+                            padding: '8px 16px',
+                            backgroundColor: selectedSymptoms.length > 0 ? '#3B82F6' : '#9CA3AF',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: selectedSymptoms.length > 0 ? 'pointer' : 'not-allowed',
+                            fontSize: '13px'
+                        }}
+                    >
+                        저장
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="symptom-check-overlay" style={{
             position: 'fixed',
@@ -98,10 +318,10 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
         }}>
             <div className="symptom-check-modal" style={{
                 backgroundColor: 'white',
-                borderRadius: '16px',
-                padding: '24px',
+                borderRadius: '8px',
+                padding: '20px',
                 width: '90%',
-                maxWidth: '500px',
+                maxWidth: '480px',
                 maxHeight: '80vh',
                 overflowY: 'auto'
             }}>
@@ -110,9 +330,9 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '20px'
+                    marginBottom: '16px'
                 }}>
-                    <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold' }}>
+                    <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
                         증상 기록
                     </h2>
                     <button 
@@ -120,8 +340,9 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                         style={{
                             background: 'none',
                             border: 'none',
-                            fontSize: '24px',
-                            cursor: 'pointer'
+                            fontSize: '20px',
+                            cursor: 'pointer',
+                            color: '#6B7280'
                         }}
                     >
                         ×
@@ -130,55 +351,36 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
 
                 {/* Date Display */}
                 <div style={{
-                    backgroundColor: '#F3F4F6',
-                    padding: '12px',
-                    borderRadius: '8px',
-                    marginBottom: '20px',
-                    textAlign: 'center'
+                    backgroundColor: '#F9FAFB',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    marginBottom: '16px',
+                    textAlign: 'center',
+                    border: '1px solid #F3F4F6'
                 }}>
-                    <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                    <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>
                         {formatDate(selectedDate)}
                     </span>
                 </div>
 
                 {/* Symptom Selection */}
-                <div style={{ marginBottom: '20px' }}>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>증상 선택</h3>
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '8px', fontWeight: '500' }}>증상 선택</h3>
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(2, 1fr)',
-                        gap: '8px'
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '6px'
                     }}>
                         {commonSymptoms.map(symptom => (
-                            <div
-                                key={symptom.id}
-                                onClick={() => handleSymptomToggle(symptom.id)}
-                                style={{
-                                    padding: '12px',
-                                    border: selectedSymptoms.includes(symptom.id) 
-                                        ? '2px solid #3B82F6' 
-                                        : '1px solid #E5E7EB',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    backgroundColor: selectedSymptoms.includes(symptom.id) 
-                                        ? '#EFF6FF' 
-                                        : 'white',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px'
-                                }}
-                            >
-                                <span style={{ fontSize: '20px' }}>{symptom.icon}</span>
-                                <span style={{ fontSize: '14px' }}>{symptom.name}</span>
-                            </div>
+                            <SymptomItem key={symptom.id} symptom={symptom} />
                         ))}
                     </div>
                 </div>
 
                 {/* Custom Symptom Input */}
-                <div style={{ marginBottom: '20px' }}>
-                    <h3 style={{ fontSize: '16px', marginBottom: '8px' }}>기타 증상</h3>
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '6px', fontWeight: '500' }}>기타 증상</h3>
+                    <div style={{ display: 'flex', gap: '6px' }}>
                         <input
                             type="text"
                             value={customSymptom}
@@ -186,22 +388,22 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                             placeholder="직접 입력하세요"
                             style={{
                                 flex: 1,
-                                padding: '8px 12px',
+                                padding: '6px 10px',
                                 border: '1px solid #E5E7EB',
-                                borderRadius: '6px',
-                                fontSize: '14px'
+                                borderRadius: '4px',
+                                fontSize: '13px'
                             }}
                         />
                         <button
                             onClick={handleAddCustomSymptom}
                             style={{
-                                padding: '8px 16px',
+                                padding: '6px 12px',
                                 backgroundColor: '#3B82F6',
                                 color: 'white',
                                 border: 'none',
-                                borderRadius: '6px',
+                                borderRadius: '4px',
                                 cursor: 'pointer',
-                                fontSize: '14px'
+                                fontSize: '13px'
                             }}
                         >
                             추가
@@ -211,28 +413,28 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
 
                 {/* Severity Selection */}
                 {selectedSymptoms.length > 0 && (
-                    <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>심각도 선택</h3>
+                    <div style={{ marginBottom: '16px' }}>
+                        <h3 style={{ fontSize: '14px', marginBottom: '8px', fontWeight: '500' }}>심각도 선택</h3>
                         {selectedSymptoms.map(symptomId => {
                             const symptom = commonSymptoms.find(s => s.id === symptomId);
                             const symptomName = symptom ? symptom.name : '기타 증상';
                             
                             return (
-                                <div key={symptomId} style={{ marginBottom: '12px' }}>
-                                    <div style={{ fontSize: '14px', marginBottom: '6px' }}>
+                                <div key={symptomId} style={{ marginBottom: '8px' }}>
+                                    <div style={{ fontSize: '13px', marginBottom: '4px', color: '#374151' }}>
                                         {symptomName}
                                     </div>
-                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                    <div style={{ display: 'flex', gap: '6px' }}>
                                         {severityLevels.map(level => (
                                             <button
                                                 key={level.value}
                                                 onClick={() => handleSeverityChange(symptomId, level.value)}
                                                 style={{
-                                                    padding: '6px 12px',
+                                                    padding: '4px 10px',
                                                     border: severity[symptomId] === level.value 
-                                                        ? `2px solid ${level.color}` 
+                                                        ? `1px solid ${level.color}` 
                                                         : '1px solid #E5E7EB',
-                                                    borderRadius: '6px',
+                                                    borderRadius: '4px',
                                                     backgroundColor: severity[symptomId] === level.value 
                                                         ? level.color 
                                                         : 'white',
@@ -240,7 +442,7 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                                                         ? 'white' 
                                                         : '#374151',
                                                     cursor: 'pointer',
-                                                    fontSize: '12px'
+                                                    fontSize: '11px'
                                                 }}
                                             >
                                                 {level.label}
@@ -254,19 +456,19 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                 )}
 
                 {/* Notes */}
-                <div style={{ marginBottom: '20px' }}>
-                    <h3 style={{ fontSize: '16px', marginBottom: '8px' }}>추가 메모</h3>
+                <div style={{ marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', marginBottom: '6px', fontWeight: '500' }}>추가 메모</h3>
                     <textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="증상에 대한 추가 설명이나 메모를 입력하세요"
                         style={{
                             width: '100%',
-                            height: '80px',
-                            padding: '8px 12px',
+                            height: '60px',
+                            padding: '6px 10px',
                             border: '1px solid #E5E7EB',
-                            borderRadius: '6px',
-                            fontSize: '14px',
+                            borderRadius: '4px',
+                            fontSize: '13px',
                             resize: 'vertical'
                         }}
                     />
@@ -275,18 +477,18 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                 {/* Action Buttons */}
                 <div style={{
                     display: 'flex',
-                    gap: '12px',
+                    gap: '8px',
                     justifyContent: 'flex-end'
                 }}>
                     <button
                         onClick={onClose}
                         style={{
-                            padding: '10px 20px',
+                            padding: '8px 16px',
                             border: '1px solid #E5E7EB',
-                            borderRadius: '6px',
+                            borderRadius: '4px',
                             backgroundColor: 'white',
                             cursor: 'pointer',
-                            fontSize: '14px'
+                            fontSize: '13px'
                         }}
                     >
                         취소
@@ -295,13 +497,13 @@ const SymptomCheck = ({ selectedDate, onSaveSymptoms, onClose }) => {
                         onClick={handleSave}
                         disabled={selectedSymptoms.length === 0}
                         style={{
-                            padding: '10px 20px',
+                            padding: '8px 16px',
                             backgroundColor: selectedSymptoms.length > 0 ? '#3B82F6' : '#9CA3AF',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '6px',
+                            borderRadius: '4px',
                             cursor: selectedSymptoms.length > 0 ? 'pointer' : 'not-allowed',
-                            fontSize: '14px'
+                            fontSize: '13px'
                         }}
                     >
                         저장

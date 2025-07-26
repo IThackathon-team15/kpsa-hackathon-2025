@@ -852,6 +852,10 @@ atient Info Page Styles */
   background: linear-gradient(135deg, #4A90E2, #357ABD);
 }
 
+.icon-circle.purple {
+  background: linear-gradient(135deg, #9C27B0, #673AB7);
+}
+
 .service-icon span:last-child {
   font-size: 12px;
   color: #666;
@@ -1365,5 +1369,237 @@ Page Styles */
   
   .cart-summary {
     max-width: 100%;
+  }
+}/* Ca
+ncer Encyclopedia Styles */
+.encyclopedia-container {
+  max-width: 400px;
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f9fa;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.encyclopedia-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.encyclopedia-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.category-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-icon-circle {
+  transform: scale(1.1);
+}
+
+.category-icon-circle.pink {
+  background: linear-gradient(135deg, #FF6B9D, #E91E63);
+}
+
+.category-icon-circle.orange {
+  background: linear-gradient(135deg, #FF9500, #FF6B35);
+}
+
+.category-icon-circle.green {
+  background: linear-gradient(135deg, #00D4AA, #00BFA5);
+}
+
+.category-icon-circle.blue {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+}
+
+.category-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.category-card p {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topic-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topic-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.topic-card h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+.topic-card .arrow {
+  font-size: 18px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.topic-card:hover .arrow {
+  transform: translateX(4px);
+}
+
+.topic-content {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.content-overview {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  border-left: 4px solid #4A90E2;
+}
+
+.content-overview p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.content-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-section {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+
+.detail-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.detail-item {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fafbfc;
+  border-radius: 8px;
+  border-left: 3px solid #4A90E2;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-item h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.detail-item p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .encyclopedia-container {
+    padding: 16px;
+  }
+  
+  .category-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .category-card {
+    padding: 20px 16px;
+  }
+  
+  .category-icon-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .topic-content {
+    padding: 20px;
   }
 }
