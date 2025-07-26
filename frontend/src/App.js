@@ -4,6 +4,7 @@ import PatientInfoPage from './components/PatientInfoPage';
 import PatientInfoPage2 from './components/PatientInfoPage2';
 import PatientInfoPage3 from './components/PatientInfoPage3';
 import MainPage from './components/MainPage';
+import ShopPage from './components/ShopPage';
 import { patientAPI } from './services/api';
 import './App.css';
 
@@ -79,6 +80,16 @@ function App() {
     }
   };
 
+  // 쇼핑 페이지로 이동
+  const handleGoToShop = () => {
+    setCurrentPage('shop');
+  };
+
+  // 메인 페이지로 돌아가기
+  const handleBackToMain = () => {
+    setCurrentPage('main');
+  };
+
   // 로그아웃
   const handleLogout = () => {
     setCurrentUser(null);
@@ -108,6 +119,13 @@ function App() {
         <MainPage 
           user={currentUser}
           onLogout={handleLogout}
+          onGoToShop={handleGoToShop}
+        />
+      )}
+      {currentPage === 'shop' && (
+        <ShopPage 
+          user={currentUser}
+          onBackToMain={handleBackToMain}
         />
       )}
     </div>

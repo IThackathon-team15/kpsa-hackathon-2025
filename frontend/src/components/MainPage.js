@@ -1,28 +1,54 @@
 import React, { useState } from 'react';
+import surgeryIcon from '../assets/surgery.png';
+import medicationIcon from '../assets/medication.png'
+import radiationIcon from '../assets/radiation.png'
+import sideeffectIcon from '../assets/sideeffect.png'
+import SymptomCheck from './SymptomCheck';
 
-const MainPage = ({ user, onLogout }) => {
+const DrugScheduleCard = () => {
+    return (
+        <div className="drug-schedule-card" style={{
+            width: 'calc(100% - 40px)',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            padding: '16px',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+            backgroundColor: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px'
+        }}>
+            {/* 날짜 */}
+            <div style={{ fontSize: '14px', color: '#6b7280' }}>2025.07.02</div>
+            {/* D-day */}
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827' }}>D-4</div>
+            {/* 사이클 */}
+            <div style={{ fontSize: '14px', color: '#9ca3af' }}>x번째 cycle</div>
+            {/* 메뉴 아이콘 */}
+            <div style={{ marginLeft: 'auto', color: '#9ca3af', fontSize: '20px', lineHeight: '1' }}>⋯</div>
+        </div>
+    );
+};
+
+const MainPage = ({ user, onLogout, onGoToShop }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [activeTab, setActiveTab] = useState('calendar');
+    const [selectedDate, setSelectedDate] = useState(2); // September 2nd selected
+    const [showSymptomCheck, setShowSymptomCheck] = useState(false);
+    const [symptomData, setSymptomData] = useState({});
 
-    // Sample treatment data
-    const treatmentData = {
-        '2025-01-28': [
-            { type: 'appointment', time: '10:00', title: '종양내과 진료', doctor: '김○○ 교수' },
-            { type: 'medication', time: '08:00', title: '경구약 복용', detail: '항암제 1정' }
-        ],
-        '2025-01-30': [
-            { type: 'chemotherapy', time: '09:00', title: '화학요법 (1주기)', location: '암센터 3층' },
-            { type: 'test', time: '08:00', title: '혈액검사', detail: 'CBC, 간기능' }
-        ],
-        '2025-02-03': [
-            { type: 'radiation', time: '14:00', title: '방사선 치료 (5회차)', location: '방사선종양학과' }
-        ]
+    // Sample calendar data - 증상 기록이 있는 날짜 표시
+    const calendarEvents = {
+        2: { hasEvent: true, isSelected: true, hasSymptoms: true },
+        13: { hasEvent: true, hasSymptoms: false },
+        15: { hasEvent: true, hasSymptoms: true },
+        17: { hasEvent: true, hasSymptoms: false },
+        29: { hasEvent: true, hasSymptoms: true },
+        30: { hasEvent: true, hasSymptoms: false }
     };
 
-    const getDaysInMonth = (date) => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
+    const getDaysInMonth = () => {
+        const year = 2025;
+        const month = 8; // September (0-indexed)
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
         const daysInMonth = lastDay.getDate();
@@ -30,78 +56,88 @@ const MainPage = ({ user, onLogout }) => {
 
         const days = [];
 
-        // Add empty cells for days before the first day of the month
-        for (let i = 0; i < startingDayOfWeek; i++) {
-            days.push(null);
+        // Previous month's last days
+        const prevMonth = new Date(year, month - 1, 0);
+        for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+            days.push({ day: prevMonth.getDate() - i, isPrevMonth: true });
         }
 
-        // Add days of the month
+        // Current month days
         for (let day = 1; day <= daysInMonth; day++) {
-            days.push(day);
+            days.push({ day, isCurrentMonth: true });
+        }
+
+        // Next month's first days
+        const remainingCells = 42 - days.length;
+        for (let day = 1; day <= remainingCells; day++) {
+            days.push({ day, isNextMonth: true });
         }
 
         return days;
     };
 
-    const formatDateKey = (year, month, day) => {
-        return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    };
-
-    const getEventTypeIcon = (type) => {
-        const icons = {
-            appointment: '🏥',
-            chemotherapy: '💉',
-            radiation: '⚡',
-            test: '🔬',
-            medication: '💊',
-            surgery: '🔪',
-            counseling: '💭'
-        };
-        return icons[type] || '📅';
+    const handleSaveSymptoms = (data) => {
+        setSymptomData(prev => ({
+            ...prev,
+            [data.date]: data
+        }));
+        
+        // 증상이 기록된 날짜에 표시 업데이트
+        console.log('증상 데이터 저장됨:', data);
     };
 
     const renderCalendar = () => {
-        const days = getDaysInMonth(currentDate);
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
+        const days = getDaysInMonth();
 
         return (
-            <div className="calendar-grid">
+            <div className="calendar-container">
                 <div className="calendar-header">
-                    <button onClick={() => setCurrentDate(new Date(year, month - 1))}>‹</button>
-                    <h3>{year}년 {month + 1}월</h3>
-                    <button onClick={() => setCurrentDate(new Date(year, month + 1))}>›</button>
+                    <button className="nav-btn">‹</button>
+                    <div className="month-year">
+                        <h3>September</h3>
+                        <span>2025</span>
+                    </div>
+                    <button className="nav-btn">›</button>
                 </div>
 
                 <div className="calendar-weekdays">
-                    {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                         <div key={day} className="weekday">{day}</div>
                     ))}
                 </div>
 
-                <div className="calendar-days">
-                    {days.map((day, index) => {
-                        if (!day) return <div key={index} className="empty-day"></div>;
-
-                        const dateKey = formatDateKey(year, month, day);
-                        const events = treatmentData[dateKey] || [];
-                        const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
+                <div className="calendar-grid">
+                    {days.map((dayObj, index) => {
+                        const { day, isCurrentMonth, isPrevMonth, isNextMonth } = dayObj;
+                        const eventData = calendarEvents[day];
+                        const isSelected = eventData?.isSelected && isCurrentMonth;
+                        const hasEvent = eventData?.hasEvent && isCurrentMonth;
 
                         return (
                             <div
-                                key={day}
-                                className={`calendar-day ${isToday ? 'today' : ''} ${events.length > 0 ? 'has-events' : ''}`}
-                                onClick={() => setSelectedDate(dateKey)}
+                                key={index}
+                                className={`calendar-day ${isCurrentMonth ? 'current' : ''} ${isPrevMonth ? 'prev' : ''} ${isNextMonth ? 'next' : ''} ${isSelected ? 'selected' : ''} ${hasEvent ? 'has-event' : ''}`}
+                                onClick={() => {
+                                    if (isCurrentMonth) {
+                                        setSelectedDate(day);
+                                        setShowSymptomCheck(true);
+                                    }
+                                }}
+                                style={{ cursor: isCurrentMonth ? 'pointer' : 'default' }}
                             >
                                 <span className="day-number">{day}</span>
-                                <div className="day-events">
-                                    {events.slice(0, 2).map((event, i) => (
-                                        <div key={i} className={`event-dot ${event.type}`}>
-                                            {getEventTypeIcon(event.type)}
-                                        </div>
-                                    ))}
-                                    {events.length > 2 && <div className="more-events">+{events.length - 2}</div>}
-                                </div>
+                                {hasEvent && <div className="event-indicator"></div>}
+                                {eventData?.hasSymptoms && isCurrentMonth && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '2px',
+                                        right: '2px',
+                                        width: '6px',
+                                        height: '6px',
+                                        backgroundColor: '#10B981',
+                                        borderRadius: '50%'
+                                    }}></div>
+                                )}
                             </div>
                         );
                     })}
@@ -110,146 +146,178 @@ const MainPage = ({ user, onLogout }) => {
         );
     };
 
-    const renderDayDetail = () => {
-        if (!selectedDate) return null;
-
-        const events = treatmentData[selectedDate] || [];
-        const date = new Date(selectedDate);
-
-        return (
-            <div className="day-detail">
-                <h4>{date.getMonth() + 1}월 {date.getDate()}일 일정</h4>
-                {events.length === 0 ? (
-                    <p>예정된 일정이 없습니다.</p>
-                ) : (
-                    <div className="events-list">
-                        {events.map((event, index) => (
-                            <div key={index} className={`event-item ${event.type}`}>
-                                <div className="event-icon">{getEventTypeIcon(event.type)}</div>
-                                <div className="event-content">
-                                    <div className="event-time">{event.time}</div>
-                                    <div className="event-title">{event.title}</div>
-                                    {event.doctor && <div className="event-detail">담당의: {event.doctor}</div>}
-                                    {event.location && <div className="event-detail">장소: {event.location}</div>}
-                                    {event.detail && <div className="event-detail">{event.detail}</div>}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        );
-    };
-
     return (
         <div className="main-page-container">
-            <div className="main-header">
-                <h1 className="main-title">치료 캘린더</h1>
-                <p className="main-subtitle">
-                    {user?.name || user?.phoneNumber}님의 맞춤형 치료 일정 관리
-                </p>
-            </div>
-
-            <div className="main-content">
-                <div className="content-tabs">
-                    <button
-                        className={`tab ${activeTab === 'calendar' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('calendar')}
-                    >
-                        📅 캘린더
-                    </button>
-                    <button
-                        className={`tab ${activeTab === 'today' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('today')}
-                    >
-                        📋 오늘 할 일
-                    </button>
-                    <button
-                        className={`tab ${activeTab === 'symptoms' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('symptoms')}
-                    >
-                        📊 증상 기록
-                    </button>
+            {/* Header Section */}
+            <div className="header-section">
+                <div className="header-top">
+                    <div className="profile-circle"></div>
+                    <div className="header-icons">
+                        <span className="icon">🔔</span>
+                        <span className="icon">💬</span>
+                    </div>
                 </div>
-
-                <div className="tab-content">
-                    {activeTab === 'calendar' && (
-                        <div className="calendar-section">
-                            {renderCalendar()}
-                            {renderDayDetail()}
-                        </div>
-                    )}
-
-                    {activeTab === 'today' && (
-                        <div className="today-section">
-                            <h3>오늘의 치료 일정</h3>
-                            <div className="today-tasks">
-                                <div className="task-item">
-                                    <span className="task-icon">💊</span>
-                                    <div className="task-content">
-                                        <div className="task-title">아침 약물 복용</div>
-                                        <div className="task-time">08:00 - 완료됨</div>
-                                    </div>
-                                </div>
-                                <div className="task-item pending">
-                                    <span className="task-icon">🏥</span>
-                                    <div className="task-content">
-                                        <div className="task-title">종양내과 진료</div>
-                                        <div className="task-time">10:00 - 예정</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'symptoms' && (
-                        <div className="symptoms-section">
-                            <h3>증상 및 부작용 기록</h3>
-                            <div className="symptom-tracker">
-                                <div className="symptom-item">
-                                    <label>통증 수준 (0-10)</label>
-                                    <input type="range" min="0" max="10" defaultValue="3" />
-                                    <span>3</span>
-                                </div>
-                                <div className="symptom-item">
-                                    <label>피로도 (0-10)</label>
-                                    <input type="range" min="0" max="10" defaultValue="5" />
-                                    <span>5</span>
-                                </div>
-                                <div className="symptom-item">
-                                    <label>식욕 상태</label>
-                                    <select>
-                                        <option>좋음</option>
-                                        <option>보통</option>
-                                        <option>나쁨</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="quick-actions">
-                    <button className="quick-action-btn emergency">
-                        <span>🚨</span>
-                        응급 연락
-                    </button>
-                    <button className="quick-action-btn primary">
-                        <span>📞</span>
-                        의료진 연락
-                    </button>
-                    <button className="quick-action-btn secondary">
-                        <span>📝</span>
-                        증상 기록
-                    </button>
+                <div className="header-content">
+                    <h1 className="completion-rate">Cancer Companion</h1>
+                    <p className="completion-subtitle">다음 병원 예약: 8월 7일 월요일</p>
                 </div>
             </div>
 
+            {/* Search Bar */}
+            <div className="search-container">
+                <div className="search-bar">
+                    <span className="search-icon">🔍</span>
+                    <input type="text" placeholder="2025.08.05 예약입니다." />
+                </div>
+            </div>
+
+            {/* Calendar */}
+            {renderCalendar()}
+
+            {/* Selected Date Symptom Summary */}
+            {symptomData[selectedDate] && (
+                <div style={{
+                    margin: '20px 0',
+                    padding: '16px',
+                    backgroundColor: '#F0F9FF',
+                    borderRadius: '12px',
+                    border: '1px solid #E0F2FE'
+                }}>
+                    <h3 style={{ 
+                        fontSize: '16px', 
+                        fontWeight: 'bold', 
+                        marginBottom: '8px',
+                        color: '#0369A1'
+                    }}>
+                        {selectedDate}일 증상 기록
+                    </h3>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+                        {symptomData[selectedDate].symptoms.map((symptom, index) => (
+                            <span
+                                key={index}
+                                style={{
+                                    padding: '4px 8px',
+                                    backgroundColor: symptom.severity === 3 ? '#FEE2E2' : 
+                                                   symptom.severity === 2 ? '#FEF3C7' : '#D1FAE5',
+                                    color: symptom.severity === 3 ? '#DC2626' : 
+                                           symptom.severity === 2 ? '#D97706' : '#059669',
+                                    borderRadius: '12px',
+                                    fontSize: '12px',
+                                    fontWeight: '500'
+                                }}
+                            >
+                                {symptom.name}
+                            </span>
+                        ))}
+                    </div>
+                    {symptomData[selectedDate].notes && (
+                        <p style={{ 
+                            fontSize: '14px', 
+                            color: '#64748B', 
+                            margin: 0,
+                            fontStyle: 'italic'
+                        }}>
+                            "{symptomData[selectedDate].notes}"
+                        </p>
+                    )}
+                </div>
+            )}
+
+            {/* Next Anticancer Drug Schedule */}
+            <div className="drug-schedule-section" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <DrugScheduleCard />
+            </div>
+
+            {/* Service Icons */}
+            <div className="services-section">
+                <h3 className="section-title">암 치료 백과사전</h3>
+                <div className="service-icons">
+                    <div className="service-icon">
+                        <div className="icon-circle pink">
+                            <img src={medicationIcon} alt="항암제 아이콘" style={{ width: '40px', height: '40px' }} />
+                        </div>
+                        <span>항암제</span>
+                    </div>
+                    <div className="service-icon">
+                        <div className="icon-circle orange">
+                            <img src={radiationIcon} alt="방사선 아이콘" style={{ width: '40px', height: '40px' }} />
+                        </div>
+                        <span>방사선</span>
+                    </div>
+                    <div className="service-icon">
+                        <div className="icon-circle green">
+                            <img src={surgeryIcon} alt="수술 아이콘" style={{ width: '40px', height: '40px' }} />
+                        </div>
+                        <span>수술</span>
+                    </div>
+                    <div className="service-icon">
+                        <div className="icon-circle blue">
+                            <img src={sideeffectIcon} alt="부작용 아이콘" style={{ width: '40px', height: '40px' }} />
+                        </div>
+                        <span>부작용 관리</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Promotion Banner */}
+            <div className="promotion-banner" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
+                <div className="banner-content">
+                    <h4>위암 환자에 적합한</h4>
+                    <h4>밀키트를 구매하세요.</h4>
+                    <p>"Purchase a meal kit suitable for gastric cancer patients."</p>
+                </div>
+                <div className="banner-image">
+                    <span>🩺</span>
+                </div>
+            </div>
+
+            {/* Deals Section */}
+            <div className="deals-section">
+                <div className="deals-header">
+                    <h3>Deals of the Day</h3>
+                    <span className="more-link">More</span>
+                </div>
+                <div className="deals-grid">
+                    <div className="deal-card" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
+                        <div className="deal-placeholder"></div>
+                        <div className="deal-info">
+                            <p>Accu-check Active</p>
+                            <p>Test Strip</p>
+                            <div className="price">
+                                <span className="current-price">Rs.112</span>
+                                <span className="discount">25%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="deal-card" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
+                        <div className="deal-placeholder"></div>
+                        <div className="deal-info">
+                            <p>Accu-check Active</p>
+                            <p>Test Strip</p>
+                            <div className="price">
+                                <span className="current-price">Rs.112</span>
+                                <span className="discount">25%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Logout Button */}
             <div className="main-footer">
                 <button className="logout-btn" onClick={onLogout}>
                     로그아웃
                 </button>
             </div>
+
+            {/* Symptom Check Modal */}
+            {showSymptomCheck && (
+                <SymptomCheck
+                    selectedDate={selectedDate}
+                    onSaveSymptoms={handleSaveSymptoms}
+                    onClose={() => setShowSymptomCheck(false)}
+                />
+            )}
         </div>
     );
 };
