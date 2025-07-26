@@ -15,15 +15,24 @@ public class PatientProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // User와 1:1 관계 설정
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    private String cancerType;
+    // --- 수정 및 추가된 필드 ---
+    private boolean isKorean; // 내국인(true) / 외국인(false)
 
-    private int cancerStage;
+    private String gender; // 성별
+
+    private boolean hasCancerDiagnosis; // 암 진단 여부
+
+    private String cancerType; // 암 종류
+
+    private String metastasisLocation; // 암 전이 위치
 
     @Column(columnDefinition = "TEXT")
-    private String treatmentHistory;
+    private String geneticMutationInfo; // 유전자 변이 정보
+
+    @Column(columnDefinition = "TEXT")
+    private String treatmentHistory; // 치료 이력
 }
