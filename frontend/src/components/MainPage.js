@@ -18,7 +18,8 @@ const DrugScheduleCard = () => {
             backgroundColor: 'white',
             display: 'flex',
             flexDirection: 'column',
-            gap: '4px'
+            gap: '4px',
+            marginTop: '20px'
         }}>
             {/* 날짜 */}
             <div style={{ fontSize: '14px', color: '#6b7280' }}>2025.07.02</div>
@@ -32,12 +33,13 @@ const DrugScheduleCard = () => {
     );
 };
 
-const MainPage = ({ user, onLogout, onGoToShop }) => {
+const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(2); // September 2nd selected
     const [showSymptomCheck, setShowSymptomCheck] = useState(false);
     const [symptomData, setSymptomData] = useState({});
     const [showEncyclopedia, setShowEncyclopedia] = useState(false);
+    const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
 
     // Sample calendar data - 증상 기록이 있는 날짜 표시
     const calendarEvents = {
@@ -152,22 +154,53 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
     return (
         <div className="main-page-container">
             {/* Header Section */}
-            <div className="header-section">
-                <div className="header-top">
-                    <div className="profile-circle"></div>
-                    <div className="header-icons">
-                        <span className="icon">🔔</span>
-                        <span className="icon">💬</span>
+            <div className="header-content" style={{
+                background: 'linear-gradient(135deg, #4A90E2, #357ABD)',
+                padding: '40px 20px 30px',
+                borderRadius: '0 0 20px 20px',
+                color: 'white',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <div>
+                    <h1 className="completion-rate" style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 8px 0' }}>Cancer Companion</h1>
+                    <p className="completion-subtitle" style={{ fontSize: '14px', opacity: '0.9', margin: '0' }}>다음 병원 예약: 8월 7일 월요일</p>
+                    <div className="header-icons" style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                        <span className="icon" style={{ fontSize: '20px', opacity: '0.9' }}>🔔</span>
+                        <span className="icon" style={{ fontSize: '20px', opacity: '0.9' }}>💬</span>
                     </div>
                 </div>
-                <div className="header-content">
-                    <h1 className="completion-rate">Cancer Companion</h1>
-                    <p className="completion-subtitle">다음 병원 예약: 8월 7일 월요일</p>
+                <div className="profile-circle" style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'rgba(255, 255, 255, 0.3)',
+                    borderRadius: '50%',
+                    border: '2px solid rgba(255, 255, 255, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <img src={imageIcon} alt="Profile" style={{ width: '24px', height: '24px', opacity: '0.8' }} />
                 </div>
             </div>
 
             {/* Calendar */}
             {renderCalendar()}
+
+            {/* Calendar Label */}
+            <div style={{
+                textAlign: 'center'
+            }}>
+                <span style={{
+                    fontSize: '12px',
+                    color: '#6B7280',
+                    fontWeight: '500'
+                }}>
+                    📝 날짜를 클릭하여 증상을 기록하세요
+                </span>
+            </div>
 
             {/* Symptom Check Section */}
             <div style={{
@@ -246,84 +279,217 @@ const MainPage = ({ user, onLogout, onGoToShop }) => {
                 </div>
             )}
 
-            {/* Next Anticancer Drug Schedule */}
-            <div className="drug-schedule-section" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                <DrugScheduleCard />
-            </div>
+            {/* Carousel Section */}
+            <div className="carousel-container" style={{
+                position: 'relative',
+                overflow: 'hidden',
+                marginBottom: '20px',
+                borderRadius: '12px'
+            }}>
+                <div className="carousel-wrapper" style={{
+                    display: 'flex',
+                    transform: `translateX(-${currentCarouselIndex * 100}%)`,
+                    transition: 'transform 0.3s ease-in-out'
+                }}>
+                    {/* Slide 1: Next Anticancer Drug Schedule */}
+                    <div className="carousel-slide" style={{
+                        minWidth: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        padding: '0 20px'
+                    }}>
+                        <DrugScheduleCard />
+                    </div>
 
-            {/* Service Icons */}
-            <div className="services-section">
-                <h3 className="section-title">암 치료 백과사전</h3>
-                <div className="service-icons">
-                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
-                        <div className="icon-circle pink">
-                            <img src={medicationIcon} alt="항암제 아이콘" style={{ width: '40px', height: '40px' }} />
-                        </div>
-                        <span>항암제</span>
-                    </div>
-                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
-                        <div className="icon-circle orange">
-                            <img src={radiationIcon} alt="방사선 아이콘" style={{ width: '40px', height: '40px' }} />
-                        </div>
-                        <span>방사선</span>
-                    </div>
-                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
-                        <div className="icon-circle green">
-                            <img src={surgeryIcon} alt="수술 아이콘" style={{ width: '40px', height: '40px' }} />
-                        </div>
-                        <span>수술</span>
-                    </div>
-                    <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
-                        <div className="icon-circle blue">
-                            <img src={sideeffectIcon} alt="부작용 아이콘" style={{ width: '40px', height: '40px' }} />
-                        </div>
-                        <span>부작용 관리</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Promotion Banner */}
-            <div className="promotion-banner" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
-                <div className="banner-content">
-                    <h4>위암 환자에 적합한</h4>
-                    <h4>밀키트를 구매하세요.</h4>
-                    <p>"Purchase a meal kit suitable for gastric cancer patients."</p>
-                </div>
-                <div className="banner-image">
-                    <span>🩺</span>
-                </div>
-            </div>
-
-            {/* Deals Section */}
-            <div className="deals-section">
-                <div className="deals-header">
-                    <h3>Deals of the Day</h3>
-                    <span className="more-link">More</span>
-                </div>
-                <div className="deals-grid">
-                    <div className="deal-card" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
-                        <div className="deal-placeholder"></div>
-                        <div className="deal-info">
-                            <p>Accu-check Active</p>
-                            <p>Test Strip</p>
-                            <div className="price">
-                                <span className="current-price">Rs.112</span>
-                                <span className="discount">25%</span>
+                    {/* Slide 2: Service Icons */}
+                    <div className="carousel-slide" style={{
+                        minWidth: '100%',
+                        padding: '0 20px'
+                    }}>
+                        <div className="services-section">
+                            <h3 className="section-title">암 치료 백과사전</h3>
+                            <div className="service-icons">
+                                <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
+                                    <div className="icon-circle pink">
+                                        <img src={medicationIcon} alt="항암제 아이콘" style={{ width: '40px', height: '40px' }} />
+                                    </div>
+                                    <span>항암제</span>
+                                </div>
+                                <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
+                                    <div className="icon-circle orange">
+                                        <img src={radiationIcon} alt="방사선 아이콘" style={{ width: '40px', height: '40px' }} />
+                                    </div>
+                                    <span>방사선</span>
+                                </div>
+                                <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
+                                    <div className="icon-circle green">
+                                        <img src={surgeryIcon} alt="수술 아이콘" style={{ width: '40px', height: '40px' }} />
+                                    </div>
+                                    <span>수술</span>
+                                </div>
+                                <div className="service-icon" onClick={() => setShowEncyclopedia(true)} style={{ cursor: 'pointer' }}>
+                                    <div className="icon-circle blue">
+                                        <img src={sideeffectIcon} alt="부작용 아이콘" style={{ width: '40px', height: '40px' }} />
+                                    </div>
+                                    <span>부작용 관리</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="deal-card" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
-                        <div className="deal-placeholder"></div>
-                        <div className="deal-info">
-                            <p>Accu-check Active</p>
-                            <p>Test Strip</p>
-                            <div className="price">
-                                <span className="current-price">Rs.112</span>
-                                <span className="discount">25%</span>
+
+                    {/* Slide 3: Promotion Banner */}
+                    <div className="carousel-slide" style={{
+                        minWidth: '100%',
+                        padding: '0 20px'
+                    }}>
+                        <div className="promotion-banner" onClick={onGoToShop} style={{ cursor: 'pointer' }}>
+                            <div className="banner-content">
+                                <h4>위암 환자에 적합한</h4>
+                                <h4>밀키트를 구매하세요.</h4>
+                                <p>"Purchase a meal kit suitable for gastric cancer patients."</p>
+                            </div>
+                            <div className="banner-image">
+                                <span>🩺</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Carousel Navigation */}
+                <div className="carousel-nav" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    marginTop: '16px'
+                }}>
+                    {[0, 1, 2].map((index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentCarouselIndex(index)}
+                            style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                border: 'none',
+                                backgroundColor: currentCarouselIndex === index ? '#3B82F6' : '#D1D5DB',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s ease'
+                            }}
+                        />
+                    ))}
+                </div>
+
+                {/* Carousel Arrow Buttons */}
+                <button
+                    onClick={() => setCurrentCarouselIndex(prev => prev > 0 ? prev - 1 : 2)}
+                    style={{
+                        position: 'absolute',
+                        left: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        color: '#374151',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    ‹
+                </button>
+                <button
+                    onClick={() => setCurrentCarouselIndex(prev => prev < 2 ? prev + 1 : 0)}
+                    style={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        color: '#374151',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    ›
+                </button>
+            </div>
+
+
+            {/* Bottom Action Buttons */}
+            <div style={{
+                display: 'flex',
+                gap: '12px',
+                padding: '20px',
+                marginBottom: '20px'
+            }}>
+                <button
+                    onClick={onGoToMembership}
+                    style={{
+                        flex: 1,
+                        padding: '14px 16px',
+                        backgroundColor: '#3B82F6',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)',
+                        transition: 'all 0.2s ease'
+                    }}>
+                    구독
+                </button>
+
+                <button
+                    onClick={onGoToQuiz}
+                    style={{
+                        flex: 1,
+                        padding: '14px 16px',
+                        backgroundColor: '#10B981',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)',
+                        transition: 'all 0.2s ease'
+                    }}>
+                    오늘의 건강 퀴즈
+                </button>
+
+                <button
+                    onClick={onGoToShop}
+                    style={{
+                        flex: 1,
+                        padding: '14px 16px',
+                        backgroundColor: '#F59E0B',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(245, 158, 11, 0.2)',
+                        transition: 'all 0.2s ease'
+                    }}
+                >
+                    스토어
+                </button>
             </div>
 
             {/* Logout Button */}

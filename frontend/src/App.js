@@ -5,6 +5,8 @@ import PatientInfoPage2 from './components/PatientInfoPage2';
 import PatientInfoPage3 from './components/PatientInfoPage3';
 import MainPage from './components/MainPage';
 import ShopPage from './components/ShopPage';
+import MembershipPage from './components/MembershipPage';
+import QuizView from './components/QuizView';
 import { patientAPI } from './services/api';
 import './App.css';
 
@@ -85,6 +87,16 @@ function App() {
     setCurrentPage('shop');
   };
 
+  // 멤버십 페이지로 이동
+  const handleGoToMembership = () => {
+    setCurrentPage('membership');
+  };
+
+  // 퀴즈 페이지로 이동
+  const handleGoToQuiz = () => {
+    setCurrentPage('quiz');
+  };
+
   // 메인 페이지로 돌아가기
   const handleBackToMain = () => {
     setCurrentPage('main');
@@ -120,10 +132,24 @@ function App() {
           user={currentUser}
           onLogout={handleLogout}
           onGoToShop={handleGoToShop}
+          onGoToMembership={handleGoToMembership}
+          onGoToQuiz={handleGoToQuiz}
         />
       )}
       {currentPage === 'shop' && (
         <ShopPage 
+          user={currentUser}
+          onBackToMain={handleBackToMain}
+        />
+      )}
+      {currentPage === 'membership' && (
+        <MembershipPage 
+          user={currentUser}
+          onBackToMain={handleBackToMain}
+        />
+      )}
+      {currentPage === 'quiz' && (
+        <QuizView 
           user={currentUser}
           onBackToMain={handleBackToMain}
         />
