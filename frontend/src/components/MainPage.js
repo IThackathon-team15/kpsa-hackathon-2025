@@ -167,9 +167,7 @@ const MainPage = ({ user, onLogout, onGoToShop, onGoToMembership, onGoToQuiz }) 
                 <div>
                     <h1 className="completion-rate" style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 8px 0' }}>Cancer Companion</h1>
                     <p className="completion-subtitle" style={{ fontSize: '14px', opacity: '0.9', margin: '0' }}>다음 병원 예약: 8월 7일 월요일</p>
-                    <div className="header-icons" style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
-                        <span className="icon" style={{ fontSize: '20px', opacity: '0.9' }}>🔔</span>
-                        <span className="icon" style={{ fontSize: '20px', opacity: '0.9' }}>💬</span>
+                    <div className="header-icons" style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>                        
                     </div>
                 </div>
                 <div className="profile-circle" style={{
