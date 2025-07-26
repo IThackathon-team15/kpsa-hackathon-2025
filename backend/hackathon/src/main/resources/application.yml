@@ -19,5 +19,10 @@ logging:
   level:
     org.hibernate.SQL: debug
 
+# Firebase ? ?? ?? ?? (???)
+firebase:
+  key-path: classpath:firebase-service-account-key.json
+
+
 gemini:
   api-key: ${GOOGLE_API_KEY}

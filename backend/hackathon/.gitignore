@@ -39,3 +39,5 @@ out/
 ### .env  ###
 .env
 
+# Firebase service account key
+src/main/resources/firebase-service-account-key.json
