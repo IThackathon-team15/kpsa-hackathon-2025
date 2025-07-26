@@ -13,4 +13,5 @@ public class PatientProfileRequest {
     private String metastasisLocation;
     private String geneticMutationInfo;
     private String treatmentHistory;
+    private Integer cancerStage;
 }

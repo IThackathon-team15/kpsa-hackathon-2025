@@ -1,4 +1,4 @@
-package com.example.hackathon.dto;
+package com.example.hackathon.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

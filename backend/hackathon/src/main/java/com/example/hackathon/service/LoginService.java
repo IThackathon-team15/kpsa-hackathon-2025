@@ -1,7 +1,7 @@
 package com.example.hackathon.service;
 
 import com.example.hackathon.domain.User;
-import com.example.hackathon.dto.LoginResponse;
+import com.example.hackathon.dto.login.LoginResponse;
 import com.example.hackathon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

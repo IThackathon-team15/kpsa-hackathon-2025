@@ -3,6 +3,7 @@ package com.example.hackathon.service;
 import com.example.hackathon.domain.PatientProfile;
 import com.example.hackathon.domain.User;
 import com.example.hackathon.dto.profile.PatientProfileRequest;
+import com.example.hackathon.dto.profile.PatientProfileResponse;
 import com.example.hackathon.repository.PatientProfileRepository;
 import com.example.hackathon.repository.UserRepository;
 import com.example.hackathon.global.code.exception.CustomException;
@@ -34,5 +35,21 @@ public class ProfileService {
         profile.setTreatmentHistory(request.getTreatmentHistory());
 
         patientProfileRepository.save(profile);
+    }
+
+    public PatientProfileResponse getProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND));
+
+        PatientProfile profile = patientProfileRepository.findByUser_Id(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.PROFILE_NOT_FOUND));
+
+        return new PatientProfileResponse(
+                user.getPhoneNumber(),
+                user.getName(),
+                profile.getCancerType(),
+                profile.getCancerStage(),
+                profile.getTreatmentHistory()
+        );
     }
 }
