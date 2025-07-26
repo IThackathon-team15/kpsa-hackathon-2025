@@ -23,6 +23,9 @@ logging:
 firebase:
   key-path: classpath:firebase-service-account-key.json
 
-
 gemini:
   api-key: ${GOOGLE_API_KEY}
+
+server:
+  address: 0.0.0.0
+  port: 8080
