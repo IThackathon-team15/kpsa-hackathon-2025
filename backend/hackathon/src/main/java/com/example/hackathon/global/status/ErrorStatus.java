@@ -17,7 +17,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 유저 에러
     USER_INVALID_PROVIDER(HttpStatus.BAD_REQUEST, "USER_4005", "로그인 경로가 규칙에 맞지 않습니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "해당 유저가 없습니다");
+
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "해당 유저가 없습니다"),
+
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE_404", "해당 프로필이 없습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

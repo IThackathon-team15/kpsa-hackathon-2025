@@ -1,7 +1,7 @@
 package com.example.hackathon.controller;
 
-import com.example.hackathon.dto.LoginRequest;
-import com.example.hackathon.dto.LoginResponse;
+import com.example.hackathon.dto.login.LoginRequest;
+import com.example.hackathon.dto.login.LoginResponse;
 import com.example.hackathon.service.LoginService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

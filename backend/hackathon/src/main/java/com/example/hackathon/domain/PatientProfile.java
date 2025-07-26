@@ -35,4 +35,6 @@ public class PatientProfile {
 
     @Column(columnDefinition = "TEXT")
     private String treatmentHistory; // 치료 이력
+
+    private Integer cancerStage; // 암 병기
 }
