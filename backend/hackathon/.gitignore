@@ -41,3 +41,6 @@ out/
 
 # Firebase service account key
 src/main/resources/firebase-service-account-key.json
+
+*.jar
+

@@ -14,7 +14,8 @@ public class GeminiService {
     private final Client client;
 
     public String getSummary(String complexText) {
-        String prompt = "다음 의료 정보를 일반인 환자가 이해하기 쉽게 매우 간단하고 친절한 어조로 요약해줘: " + complexText;
+
+        String prompt = complexText;
 
         GenerateContentResponse response =
                 client.models.generateContent(
