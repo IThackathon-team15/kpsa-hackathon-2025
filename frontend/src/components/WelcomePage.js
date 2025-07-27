@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { userAPI } from '../services/api';
+import { authAPI } from '../services/api';
 
 const WelcomePage = ({ onLogin, onExistingUser }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -40,14 +40,14 @@ const WelcomePage = ({ onLogin, onExistingUser }) => {
     setIsLoading(true);
     
     try {
-      // 핸드폰 번호로 사용자 조회
+      // 핸드폰 번호로 로그인 시도
       const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
-      const response = await userAPI.checkUserByPhone(cleanPhoneNumber);
+      const response = await authAPI.login(cleanPhoneNumber);
       
-      if (response.exists) {
+      if (response.userExists) {
         // 기존 사용자인 경우 메인 페이지로 이동
-        console.log('Existing user found:', response.user);
-        onExistingUser(response.user);
+        console.log('Existing user found');
+        onExistingUser({ phoneNumber: cleanPhoneNumber });
       } else {
         // 새 사용자인 경우 환자 정보 입력 페이지로 이동
         console.log('New user, proceeding to patient info');
@@ -56,7 +56,7 @@ const WelcomePage = ({ onLogin, onExistingUser }) => {
     } catch (error) {
       console.error('Phone login error:', error);
       // 에러 발생 시 개발용으로 환자 정보 페이지로 이동
-      //alert('서버 연결에 문제가 있습니다. 다시 시도해주세요.');
+      alert('서버 연결에 문제가 있습니다. 다시 시도해주세요.');
       // 개발용 임시 처리
       onLogin(phoneNumber.replace(/[^\d]/g, ''));
     } finally {
