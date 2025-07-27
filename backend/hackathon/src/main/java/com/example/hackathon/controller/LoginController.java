@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,6 +33,7 @@ public class LoginController {
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "로그인 요청") LoginRequest request) {        LoginResponse response = loginService.loginByPhoneNumber(request.getPhoneNumber());
+
         return ResponseEntity.ok(response);
     }
 }

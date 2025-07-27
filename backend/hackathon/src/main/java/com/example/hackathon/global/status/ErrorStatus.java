@@ -19,8 +19,10 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_INVALID_PROVIDER(HttpStatus.BAD_REQUEST, "USER_4005", "로그인 경로가 규칙에 맞지 않습니다."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "해당 유저가 없습니다"),
+
     POINTS_INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "POINTS_4001", "포인트는 0보다 커야 합니다."),
     POINTS_INSUFFICIENT(HttpStatus.BAD_REQUEST, "POINTS_4002", "보유 포인트가 부족합니다."),
+
 
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE_404", "해당 프로필이 없습니다");
 

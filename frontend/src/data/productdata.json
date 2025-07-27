@@ -1,0 +1,144 @@
+{
+  "all": {
+    "입마름": [
+      {
+        "id": 101,
+        "name": "모과차",
+        "description": "천연 모과로 만든 달콤한 차, 입마름 완화에 도움",
+        "price": 18000,
+        "originalPrice": 22000,
+        "discount": 18,
+        "image": "🍵",
+        "category": "drink",
+        "store_type": "all",
+        "symptom": "입마름"
+      }
+    ]
+  },
+  "stomach": {
+    "위통": [
+      {
+        "id": 201,
+        "name": "전복죽",
+        "description": "부드러운 전복과 쌀로 끓인 영양 죽, 위에 부담 없음",
+        "price": 25000,
+        "originalPrice": 30000,
+        "discount": 17,
+        "image": "🍲",
+        "category": "porridge",
+        "store_type": "stomach",
+        "symptom": "위통"
+      },
+      {
+        "id": 202,
+        "name": "미음",
+        "description": "소화가 잘되는 쌀 미음, 위 보호에 효과적",
+        "price": 12000,
+        "originalPrice": 15000,
+        "discount": 20,
+        "image": "🥣",
+        "category": "porridge",
+        "store_type": "stomach",
+        "symptom": "위통"
+      }
+    ],
+    "식욕부진": [
+      {
+        "id": 203,
+        "name": "모과차",
+        "description": "식욕 증진에 도움되는 모과차, 달콤한 향과 맛",
+        "price": 18000,
+        "originalPrice": 22000,
+        "discount": 18,
+        "image": "🍵",
+        "category": "drink",
+        "store_type": "stomach",
+        "symptom": "식욕부진"
+      }
+    ]
+  },
+  "colon": {
+    "장루": [
+      {
+        "id": 301,
+        "name": "장루 세척 도구 세트",
+        "description": "장루 관리를 위한 전용 세척 도구, 위생적이고 안전",
+        "price": 45000,
+        "originalPrice": 55000,
+        "discount": 18,
+        "image": "🧼",
+        "category": "medical",
+        "store_type": "colon",
+        "symptom": "장루"
+      },
+      {
+        "id": 302,
+        "name": "복대",
+        "description": "장루 환자 전용 복대, 편안한 착용감과 지지력",
+        "price": 35000,
+        "originalPrice": 42000,
+        "discount": 17,
+        "image": "🩹",
+        "category": "medical",
+        "store_type": "colon",
+        "symptom": "장루"
+      }
+    ]
+  },
+  "breast": {
+    "유방 수술": [
+      {
+        "id": 401,
+        "name": "압박 팔토시",
+        "description": "유방 수술 후 림프 부종 방지용 압박 팔토시",
+        "price": 55000,
+        "originalPrice": 68000,
+        "discount": 19,
+        "image": "🧤",
+        "category": "medical",
+        "store_type": "breast",
+        "symptom": "유방 수술"
+      },
+      {
+        "id": 402,
+        "name": "인조유방 전용 브라",
+        "description": "인조유방 착용을 위한 전용 브라, 편안하고 자연스러운 실루엣",
+        "price": 89000,
+        "originalPrice": 110000,
+        "discount": 19,
+        "image": "👙",
+        "category": "clothing",
+        "store_type": "breast",
+        "symptom": "유방 수술"
+      }
+    ]
+  },
+  "prostate": {
+    "요실금": [
+      {
+        "id": 501,
+        "name": "성인용 기저귀",
+        "description": "요실금 환자를 위한 고흡수 성인용 기저귀, 편안한 착용감",
+        "price": 32000,
+        "originalPrice": 38000,
+        "discount": 16,
+        "image": "🩲",
+        "category": "medical",
+        "store_type": "prostate",
+        "symptom": "요실금"
+      },
+      {
+        "id": 502,
+        "name": "생리대",
+        "description": "남성 요실금용 전용 패드, 얇고 흡수력이 뛰어남",
+        "price": 18000,
+        "originalPrice": 22000,
+        "discount": 18,
+        "image": "🩹",
+        "category": "medical",
+        "store_type": "prostate",
+        "symptom": "요실금"
+      }
+    ]
+  }
+}

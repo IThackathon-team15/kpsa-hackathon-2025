@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -33,6 +34,7 @@ public class ProfileController {
             @PathVariable Long userId,
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "프로필 정보") PatientProfileRequest request) {
+
         profileService.saveOrUpdateProfile(userId, request);
         return ResponseEntity.ok(new MessageResponse("프로필이 성공적으로 저장되었습니다."));
     }

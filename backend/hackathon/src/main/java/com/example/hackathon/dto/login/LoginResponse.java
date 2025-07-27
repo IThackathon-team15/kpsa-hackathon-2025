@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Schema(description = "로그인 응답")
 public class LoginResponse {
     @Schema(description = "기존 사용자 여부")

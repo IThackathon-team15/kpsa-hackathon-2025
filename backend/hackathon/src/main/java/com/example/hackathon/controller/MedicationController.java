@@ -11,12 +11,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.List;
 
 @RestController
@@ -39,6 +39,7 @@ public class MedicationController {
         AddMedicationResponse response = medicationService.addMedication(userId, request);
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/{userId}")    @Operation(summary = "복약 정보 조회", description = "사용자의 복약 정보를 조회합니다.")
     @ApiResponses({

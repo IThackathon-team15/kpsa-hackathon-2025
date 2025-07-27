@@ -14,6 +14,7 @@ public class GeminiService {
     private final Client client;
 
     public String getSummary(String complexText) {
+
         String prompt = complexText;
 
         GenerateContentResponse response =
